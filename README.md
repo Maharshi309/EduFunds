@@ -26,6 +26,7 @@ A modern web application for managing and applying for scholarships, built with 
 
 - Node.js (v16 or higher)
 - npm or yarn
+- Supabase account and project
 
 ### Installation
 
@@ -40,11 +41,18 @@ cd edufunds-scholarship-website
 npm install
 ```
 
-3. Create a `.env` file in the root directory and add your Supabase credentials:
-```
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
+3. Set up environment variables:
+   - Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+   - Update the `.env` file with your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   VITE_SUPABASE_JWT_SECRET=your_supabase_jwt_secret
+   ```
+   You can find these values in your Supabase project settings.
 
 4. Start the development server:
 ```bash
@@ -69,6 +77,13 @@ src/
   ├── types/         # TypeScript type definitions
   └── App.tsx        # Main application component
 ```
+
+## Security Notes
+
+- Never commit the `.env` file to version control
+- Keep your Supabase credentials secure
+- Rotate your JWT secrets if they have been exposed
+- Use environment variables for all sensitive data
 
 ## Contributing
 

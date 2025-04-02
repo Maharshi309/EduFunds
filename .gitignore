@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
 dist
 dist-ssr
@@ -22,3 +23,48 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.development
+.env.test
+.env.production
+
+# Security
+*.pem
+*.key
+*.cert
+*.crt
+*.jwt
+*.token
+*.secret
+*.auth
+*.credentials
+*.config
+*.conf
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.*.json
+
+# Supabase
+**/supabase/.temp
+**/supabase/.env
+**/supabase/config.toml
+**/supabase/seed.sql
+**/supabase/migrations/*.sql
+
+# Build output
+build/
+out/
+.next/
+.nuxt/
+.output/
+
+# Cache
+.cache/
+.temp/
+.tmp/
