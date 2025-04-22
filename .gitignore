@@ -68,3 +68,5 @@ out/
 .cache/
 .temp/
 .tmp/
+
+.vercel

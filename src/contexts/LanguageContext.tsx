@@ -166,7 +166,7 @@ const baseTranslations = {
     emailVerificationSent: 'Email verification sent',
     emailVerificationError: 'Email verification failed',
   },
-  profile: {
+  profileSettings: {
     updateSuccess: 'Profile updated successfully',
     updateError: 'Profile update failed',
     avatarUpdateSuccess: 'Avatar updated successfully',
@@ -283,7 +283,7 @@ const hindiTranslations = {
     emailVerificationSent: 'ईमेल सत्यापन भेजा गया',
     emailVerificationError: 'ईमेल सत्यापन विफल',
   },
-  profile: {
+  profileSettings: {
     updateSuccess: 'प्रोफ़ाइल सफलतापूर्वक अपडेट की गई',
     updateError: 'प्रोफ़ाइल अपडेट विफल',
     avatarUpdateSuccess: 'अवतार सफलतापूर्वक अपडेट किया गया',
