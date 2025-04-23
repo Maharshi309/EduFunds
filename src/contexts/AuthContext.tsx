@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (event === 'SIGNED_IN' && session) {
           // Check if we're on the login or register page to avoid redirect loops
           if (window.location.pathname.includes('/login') || window.location.pathname.includes('/register')) {
-            window.location.href = '/';
+            window.location.href = '/home';
           }
         }
       }

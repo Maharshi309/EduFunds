@@ -50,9 +50,9 @@ const LoginPage: React.FC = () => {
       
       // Forcefully redirect to home page on successful login
       if (authUser) {
-        window.location.href = '/';
+        window.location.href = '/home';
       } else {
-        navigate('/');
+        navigate('/home');
       }
     } catch (error) {
       console.error('Error signing in:', error);

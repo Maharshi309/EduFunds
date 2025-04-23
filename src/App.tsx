@@ -4,10 +4,12 @@ import {
   Route,
   createBrowserRouter,
   RouterProvider,
-  Outlet
+  Outlet,
+  Navigate
 } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { useAuth } from './contexts/AuthContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
@@ -21,7 +23,34 @@ import FAQPage from './pages/FAQPage';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-const Layout = () => {
+// Protected Route wrapper component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  return <>{children}</>;
+};
+
+// Public Layout without Navbar for auth pages
+const AuthLayout = () => {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+    </div>
+  );
+};
+
+// Protected Layout with Navbar for authenticated pages
+const ProtectedLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -35,10 +64,33 @@ const Layout = () => {
 
 const router = createBrowserRouter([
   {
-    element: <Layout />,
+    // Public routes (login/register)
+    element: <AuthLayout />,
     children: [
       {
         path: "/",
+        element: <Navigate to="/login" />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/register",
+        element: <RegisterPage />,
+      },
+    ],
+  },
+  {
+    // Protected routes (require authentication)
+    element: (
+      <ProtectedRoute>
+        <ProtectedLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "/home",
         element: <HomePage />,
       },
       {
@@ -54,14 +106,6 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: "/login",
-        element: <LoginPage />,
-      },
-      {
-        path: "/register",
-        element: <RegisterPage />,
-      },
-      {
         path: "/profile",
         element: <ProfilePage />,
       },
@@ -73,11 +117,11 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <ContactPage />,
       },
-      {
-        path: "*",
-        element: <NotFoundPage />,
-      },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
 
