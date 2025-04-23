@@ -70,8 +70,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // If user just signed in, redirect to home page
         if (event === 'SIGNED_IN' && session) {
           // Check if we're on the login or register page to avoid redirect loops
-          if (window.location.pathname.includes('/login') || window.location.pathname.includes('/register')) {
-            window.location.href = '/home';
+          const currentPath = window.location.pathname;
+          if (currentPath === '/login' || currentPath === '/register' || currentPath === '/') {
+            window.location.replace('/home');
           }
         }
       }
@@ -84,36 +85,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = async (email: string, password: string, name: string) => {
     try {
+      // First, sign up the user
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            name,
+            full_name: name, // Store the full name in auth metadata
           },
           emailRedirectTo: `${window.location.origin}/login?confirmed=true`,
         },
       });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       if (data?.user) {
-        // Insert profile data into profiles table
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert([
-            {
-              id: data.user.id,
-              name,
-              avatar_url: null,
-              updated_at: new Date().toISOString(),
-            },
-          ]);
+        try {
+          // Check if profile already exists
+          const { data: existingProfile } = await supabase
+            .from('profiles')
+            .select()
+            .eq('id', data.user.id)
+            .single();
 
-        if (profileError) {
-          throw profileError;
+          if (!existingProfile) {
+            // Only create profile if it doesn't exist
+            const { error: profileError } = await supabase
+              .from('profiles')
+              .insert([
+                {
+                  id: data.user.id,
+                  first_name: name.split(' ')[0], // Split full name into first and last
+                  last_name: name.split(' ').slice(1).join(' ') || '', // Rest of the name goes to last_name
+                  avatar_url: null,
+                  updated_at: new Date().toISOString(),
+                },
+              ]);
+
+            if (profileError) throw profileError;
+          }
+        } catch (profileError) {
+          console.error('Error creating profile:', profileError);
+          // Don't throw here - the user is created, just the profile failed
         }
       }
 

@@ -34,7 +34,7 @@ const LoginPage: React.FC = () => {
   // Add this effect to redirect to home page after authentication
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/home', { replace: true });
     }
   }, [user, navigate]);
 
@@ -48,11 +48,9 @@ const LoginPage: React.FC = () => {
       
       if (error) throw error;
       
-      // Forcefully redirect to home page on successful login
-      if (authUser) {
-        window.location.href = '/home';
-      } else {
-        navigate('/home');
+      // Let the useEffect handle navigation
+      if (!authUser) {
+        throw new Error('Failed to sign in');
       }
     } catch (error) {
       console.error('Error signing in:', error);
@@ -62,9 +60,9 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  // If already logged in, redirect to home page
+  // If already logged in, redirect to home page using replace
   if (user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/home" replace />;
   }
 
   return (

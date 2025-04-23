@@ -54,9 +54,9 @@ const RegisterPage: React.FC = () => {
     }
   };
 
-  // If already logged in, redirect to home page
+  // If already logged in, redirect to home page using replace
   if (user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/home" replace />;
   }
 
   if (registrationComplete) {
